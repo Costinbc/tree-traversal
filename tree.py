@@ -1,5 +1,5 @@
 from node import Node
-
+import pytest
 
 class Tree:
     """ Tree class for binary tree """
@@ -54,6 +54,7 @@ class Tree:
             return None
 
     def _find(self, data, node):
+        """Method for find data in the tree"""
         if data == node.data:
             return node
         elif (data < node.data and node.left is not None):
@@ -62,27 +63,50 @@ class Tree:
             return self._find(data, node.right)
 
     def deleteTree(self):
-        # TODO 1
+        """Method for delete the tree"""
         self.root = None
 
     def printTree(self):
-        # TODO 1
+        """Method for print the tree"""
         if self.root is not None:
             self._printInorderTree(self.root)
 
     def _printInorderTree(self, node):
-        # TODO 1
+        """Method for print the tree in order"""
         if node is not None:
             self._printInorderTree(node.left)
             print(str(node.data) + ' ')
             self._printInorderTree(node.right)
 
     def _printPreorderTree(self, node):
-        # TODO 2
-        pass
+        """Method for print the tree in preorder"""
+        if node is not None:
+            print(str(node.data) + ' ')
+            self._printPreorderTree(node.left)
+            self._printPreorderTree(node.right)
 
     def _printPostorderTree(self, node):
-        # TODO 2
-        pass
+        """Method for print the tree in postorder"""
+        if node is not None:
+            self._printPostorderTree(node.left)
+            self._printPostorderTree(node.right)
+            print(str(node.data) + ' ')
 
 
+class TestTree:
+    @pytest.fixture
+    def tree(self):
+        tree = Tree()
+        tree.add(10)
+        tree.add(5)
+        tree.add(15)
+        return tree
+
+    def test_find_exists(self, tree):
+        node = tree.find(10)
+        assert node is not None
+        assert node.data == 10
+
+    def test_find_not_exists(self, tree):
+        node = tree.find(20)
+        assert node is None
